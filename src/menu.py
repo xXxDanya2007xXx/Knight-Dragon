@@ -65,8 +65,8 @@ class Display:
                 art = file.read()
             self.console.print(Align.center(f"[{color}]{art}[/{color}]"))
         except FileNotFoundError:
-            self.console.print(f"[bold red]File {
-                               filename} not found![/bold red]", justify="center")
+            self.console.print(f"[bold red]File {filename}[/bold red] " +
+                               "[bold red]not found![/bold red]", justify="center")
 
     def show_help_text(self):
         self.console.print()
