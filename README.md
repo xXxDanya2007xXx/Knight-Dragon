@@ -1,11 +1,7 @@
 # Knight & Dragon 🛡️⚔️🐉
-<p align="center">
-
 [![Python Version](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 
-</p>
-
-Текстовая игра, написанная на `Python 🐍` с использованием принципов ООП.
+Текстовая игра, написанная на `Python 🐍` с использованием принципов ООП.  
 **Победите очень злого дракона!!!111 😡😡😡**
 
 ## Структура проекта 🗃️
