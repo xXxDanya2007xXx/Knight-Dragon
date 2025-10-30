@@ -65,8 +65,8 @@ class Display:
                 art = file.read()
             self.console.print(Align.center(f"[{color}]{art}[/{color}]"))
         except FileNotFoundError:
-            self.console.print(f"[bold red]File {filename}",
-                               "not found![/bold red]", justify="center")
+            self.console.print(f"[bold red]File {
+                               filename} not found![/bold red]", justify="center")
 
     def show_help_text(self):
         self.console.print()
@@ -153,7 +153,7 @@ if __name__ == "__main__":
 
     running = True
     while running:
-        menu.show("./logo.ascii")
+        menu.show("src/logo.ascii")
 
         action = input_handler.get_action()
 
