@@ -1,4 +1,4 @@
-# Knight & Dragon 🛡️⚔️🐉
+# Knight and& Dragon 🛡️⚔️🐉
 [![Python Version](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 
 Текстовая игра, написанная на `Python 🐍` с использованием принципов ООП.  
@@ -8,8 +8,12 @@
 ```
 Knight-Dragon/
 ├── src/
+│   ├── sounds/
+│   │   └── ...
+│   ├── __init__.py
 │   ├── logo.ascii
-│   └── menu.py
+│   ├── sound_manager.py
+│   └── main_menu.py
 ├── main.py
 ├── README.md
 └── requirements.txt
@@ -17,7 +21,7 @@ Knight-Dragon/
 
 ## TODO 🎯
 - [x] Реализовать меню
-- [ ] Добавить звуки
+- [x] Добавить звуки
 - [ ] ...
 - [ ] ...
 - [ ] ???

@@ -3,4 +3,4 @@
 import os
 
 if __name__ == "__main__":
-    _ = os.system("python3 src/menu.py")
+    _ = os.system("python3 -m src.main_menu")
