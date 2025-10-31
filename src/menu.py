@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 
 from rich.console import Console
+from rich.console import Group
 from rich.text import Text
 from rich.align import Align
 from rich.panel import Panel
+from rich.box import ASCII
 import readchar
 import os
 
@@ -28,28 +30,23 @@ class InputHandler:
 
 
 class MenuItem:
-    def __init__(self, text: str, enabled: bool = True):
+    def __init__(self, text: str, enabled: bool = True, is_exit: bool = False):
         self.text = text
         self.enabled = enabled
+        self.is_exit = is_exit
 
     def render(self, is_selected: bool) -> Text:
-        prefix = "> " if is_selected else "  "
+        prefix = Text(
+            "---> ", style="bold white") if is_selected else Text("\u00A0" * 5 + "\u200B")
+        rprefix = Text(
+            " <---", style="bold white") if is_selected else Text("\u00A0" * 5 + "\u200B")
 
         if is_selected:
-            if self.enabled:
-                style = "bold white"
-            else:
-                style = "bold black"
+            style = "bold white" if self.enabled else "bold black"
         else:
-            if self.enabled:
-                style = "white"
-            else:
-                style = "bold black"
+            style = "white" if self.enabled else "bold black"
 
-        if not self.enabled and is_selected:
-            return Text("> ", style="bold white") + Text(self.text, style=style)
-        else:
-            return Text(f"{prefix}{self.text}", style=style)
+        return prefix + Text(self.text, style=style) + rprefix
 
 
 class Display:
@@ -65,8 +62,8 @@ class Display:
                 art = file.read()
             self.console.print(Align.center(f"[{color}]{art}[/{color}]"))
         except FileNotFoundError:
-            self.console.print(f"[bold red]File {filename}[/bold red] " +
-                               "[bold red]not found![/bold red]", justify="center")
+            self.console.print(f"[bold red]File {
+                               filename} not found![/bold red]", justify="center")
 
     def show_help_text(self):
         self.console.print()
@@ -102,20 +99,23 @@ class Menu:
         return self.items[self.current_index]
 
     def render(self):
+        menu_items = []
         for i, item in enumerate(self.items):
-            is_selected = (i == self.current_index)
+            render_text = Align.center(item.render(i == self.current_index))
+            menu_items.append(render_text)
 
-            render_text = item.render(is_selected)
-
-            self.display.console.print(render_text, justify="center")
+        content = Group(*menu_items)
+        menu_panel = Panel(Align.center(content),
+                           title="[bold white]Knight and& Dragon[/bold white]",
+                           box=ASCII, border_style="bold black",
+                           padding=(1, 5), expand=False)
+        self.display.console.print(Align.center(menu_panel))
 
     def show(self, logo_path: str):
         self.display.clear_screen()
         if logo_path:
-            self.display.show_ascii_art(logo_path, color="bold magenta")
-
+            self.display.show_ascii_art(logo_path)
         self.render()
-
         self.display.show_help_text()
 
     def handle_action(self, action: str) -> bool:
@@ -128,7 +128,7 @@ class Menu:
         elif action == "select":
             selected = self.get_selected_item()
 
-            if selected.text == "EXIT":
+            if selected.is_exit:
                 return False
 
             self.display.clear_screen()
@@ -146,17 +146,14 @@ class Menu:
 
 if __name__ == "__main__":
     items = [MenuItem("NEW GAME"), MenuItem(
-        "CONTINUE", enabled=False), MenuItem("EXIT")]
-
+        "CONTINUE", enabled=False), MenuItem("EXIT", is_exit=True)]
     menu = Menu(items)
     input_handler = InputHandler()
 
     running = True
     while running:
         menu.show("src/logo.ascii")
-
         action = input_handler.get_action()
-
         running = menu.handle_action(action)
 
     menu.display.clear_screen()
