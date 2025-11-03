@@ -9,6 +9,7 @@ from rich.text import Text
 
 from .name_prompt import NamePrompt
 from .sound_manager import SoundManager
+from .levels.intro import show_intro
 from .utils import clear_screen, show_placeholder
 
 NBSP = "\u00A0"
@@ -33,14 +34,10 @@ class InputHandler:
 
 
 class MenuItem:
-    text: str
-    enabled: bool
-    is_exit: bool
-
     def __init__(self, text: str, enabled: bool = True, is_exit: bool = False):
-        self.text = text
-        self.enabled = enabled
-        self.is_exit = is_exit
+        self.text: str = text
+        self.enabled: bool = enabled
+        self.is_exit: bool = is_exit
 
     def render(self, is_selected: bool) -> Text:
         if is_selected:
@@ -84,20 +81,15 @@ class Display:
 
 
 class Menu:
-    items: list[MenuItem]
-    current_index: int
-    display: Display
-    sound: SoundManager | None
-
     def __init__(
             self,
             items: list[MenuItem],
             sound_manager: SoundManager | None = None
     ):
-        self.items = items
-        self.current_index = 0
-        self.display = Display()
-        self.sound = sound_manager
+        self.items: list[MenuItem] = items
+        self.current_index: int = 0
+        self.display: Display = Display()
+        self.sound: SoundManager | None = sound_manager
 
     def move_up(self):
         steps = 0
@@ -161,8 +153,10 @@ class Menu:
 
             if selected.text == "NEW GAME":
                 prompt = NamePrompt(sound_manager=self.sound)
-                _player_name = prompt.ask()
-                show_placeholder()
+                player_name = prompt.ask()
+
+                if player_name:
+                    show_intro(player_name, sound_manager=self.sound)
             else:
                 show_placeholder()
         elif action == "quit":
@@ -177,6 +171,7 @@ def main():
     sound.load("select", "src/sounds/undertale-select.wav")
     sound.load("TXT1", "src/sounds/undertale-txt1.wav")
     sound.load("TXT2", "src/sounds/undertale-txt2.wav")
+    sound.load("txtal", "src/sounds/undertale-txtal.wav")
     sound.play_music("src/sounds/undertale-start-menu.wav")
 
     items = [
