@@ -10,6 +10,7 @@ from rich.text import Text
 from .name_prompt import NamePrompt
 from .sound_manager import SoundManager
 from .levels.intro import show_intro
+from .levels.level_01 import show_level_one
 from .utils import clear_screen, show_placeholder
 
 NBSP = "\u00A0"
@@ -157,6 +158,7 @@ class Menu:
 
                 if player_name:
                     show_intro(player_name, sound_manager=self.sound)
+                    show_level_one(player_name, sound_manager=self.sound)
             else:
                 show_placeholder()
         elif action == "quit":

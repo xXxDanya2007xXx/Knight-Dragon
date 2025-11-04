@@ -25,6 +25,7 @@ class Typewriter:
         char_delay: float = 0.025,
         beep_every: int = 3,
         wait_for_input: bool = True,
+        show_footer: bool = True,
     ):
         self.console: Console = Console()
         self.sound: SoundManager | None = sound_manager
@@ -38,6 +39,7 @@ class Typewriter:
         self._typed_lines: list[Text] = []
         self._live: Live | None = None
         self._wait_for_input: bool = wait_for_input
+        self._show_footer: bool = show_footer
 
         self._animating: bool = True
         self._skip: bool = False
@@ -71,7 +73,7 @@ class Typewriter:
             self._disable_cbreak()
         return False
 
-    def type(self, text: str, pause_after: float = 0.0):
+    def type(self, text: str, pause_after: float = 0.25):
         if self._skip:
             full_text = self._from_markup(text)
             self._typed_lines.append(full_text)
@@ -225,17 +227,9 @@ class Typewriter:
             self._play("txtal")
 
     def _calc_content_width(self) -> int:
-        widths = [self._from_markup(line).cell_len for line in self._all_lines]
-        if self._title:
-            widths.append(Text(self._title).cell_len)
-        widths.append(self._build_skip_footer().cell_len)
-        widths.append(self._build_continue_footer().cell_len)
-        return max(widths) if widths else 0
+        return 0
 
     def _pad_to_width(self, txt: Text) -> Text:
-        pad_len = max(0, self._content_width - txt.cell_len)
-        if pad_len:
-            _ = txt.append(NBSP * pad_len)
         return txt
 
     def _render_view(self) -> Align:
@@ -249,14 +243,17 @@ class Typewriter:
         remain = len(self._all_lines) - len(self._typed_lines)
         for _ in range(max(0, remain)):
             items.append(self._pad_to_width(Text()))
-        items.append(self._pad_to_width(Text()))
-        footer = (
-            self._build_continue_footer()
-            if not self._animating
-            else self._build_skip_footer()
-        )
-        items.append(self._pad_to_width(footer))
-        return Align.center(Group(*items))
+
+        if self._show_footer:
+            items.append(self._pad_to_width(Text()))
+            footer = (
+                self._build_continue_footer()
+                if not self._animating
+                else self._build_skip_footer()
+            )
+            items.append(self._pad_to_width(footer))
+
+        return Align.left(Group(*items))
 
     def _build_skip_footer(self) -> Text:
         return Text.assemble(

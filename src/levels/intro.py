@@ -39,9 +39,6 @@ class IntroStory:
             tw.type(lines[6], pause_after=0.25)
             tw.type(lines[7], pause_after=0.25)
             tw.type(lines[8])
-            tw.wait_for_continue()
-
-        clear_screen()
 
 
 def show_intro(player_name: str, sound_manager: SoundManager | None = None):
