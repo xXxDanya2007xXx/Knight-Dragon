@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 
-import os
+from src.game import Game
 
 if __name__ == "__main__":
-    _ = os.system("python3 -m src.main_menu")
+    game = Game()
+
+    game.run()
