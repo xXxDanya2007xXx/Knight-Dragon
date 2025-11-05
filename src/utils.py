@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 
-from rich.console import Console
-from rich.text import Text
-from rich.panel import Panel
 import os
+from rich.console import Console
+from rich.panel import Panel
+from rich.text import Text
 
 
 def clear_screen():
@@ -12,22 +12,13 @@ def clear_screen():
 
 def show_placeholder():
     console = Console()
-
     clear_screen()
-    panel = Panel.fit(Text("Press Enter to go back...",
-                      style="bold white", justify="center"),
-                      border_style="bold black")
+    panel = Panel.fit(
+        Text(
+            "В разработке. Нажмите Enter, чтобы вернуться в главное меню...",
+            style="bright_white",
+            justify="center"
+        ), border_style="bright_black"
+    )
     console.print(panel, justify="center")
     _ = input()
-
-
-def show_help_message():
-    console = Console()
-
-    console.print()
-    help_text = (
-        "Use [bright_white]↑ ↓[/bright_white] to navigate, "
-        "[bright_white]Enter[/bright_white] to select, "
-        "[bright_red]q[/bright_red] - quit the game"
-    )
-    console.print(help_text, justify="center")

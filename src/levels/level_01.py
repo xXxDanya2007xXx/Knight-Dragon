@@ -1,59 +1,50 @@
 #!/usr/bin/env python3
 
-from rich.console import Console
-from rich.text import Text
-
-from ..choices import ChoicePrompt
-from ..endings import show_game_over, show_victory
+from ..utils import clear_screen, show_placeholder
+from ..ui import Typewriter, ChoicePrompt
 from ..sound_manager import SoundManager
-from ..typewriter import Typewriter
-from ..utils import clear_screen
+from .. import endings
 
 
-class LevelOneStory:
-    def __init__(self, sound_manager: SoundManager | None = None):
-        self.sound_manager: SoundManager | None = sound_manager
-        self.console: Console = Console()
+def run(player_name: str, sound_manager: SoundManager | None = None):
+    clear_screen()
+    player_name = player_name if player_name else "Knight"
 
-    def show(self, player_name: str):
-        clear_screen()
+    lines = [
+        "Перед тобой огромное озеро.",
+        "Или море?",
+        "",
+        "В любом случае...",
+        "",
+        "Сейчас его перелетает злой дракон!",
+        "Он похитил принцессу, и она очень громко визжит в его лапах.",
+        "",
+        "Несмотря на это, твой рыцарский долг - спасти ее.",
+        "Ты должен догнать дракона, и для этого нужно переплыть озеро!",
+    ]
 
-        lines = [
-            "Some text...",
-            "I don't really care 'bout it...",
-            "",
-            "Yet another text...",
-        ]
-        with Typewriter(
-            lines_for_layout=lines,
-            sound_manager=self.sound_manager,
-            wait_for_input=False,
-            show_footer=False,
-        ) as tw:
-            for line in lines:
-                tw.type(line)
+    with Typewriter(lines_for_layout=lines, sound_manager=sound_manager) as tw:
+        for line in lines:
+            tw.type(line)
 
-        self.console.print(Text())
+    choice_prompt = ChoicePrompt(
+        options=[
+            "Начать героически плыть!",
+            "Позорно отступить и начать думать.",
+        ],
+        sound_manager=sound_manager
+    )
 
-        options = [
-            "Very good option!",
-            "Very bad option.",
-        ]
-        prompt = ChoicePrompt(options, sound_manager=self.sound_manager)
-        selected = prompt.ask()
+    choice = choice_prompt.ask("Решай быстро - дракон продолжает улетать!")
 
-        if selected == 0:
-            show_game_over(
-                "That must be embarrasing...",
-                sound_manager=self.sound_manager
-            )
-        else:
-            show_victory(player_name, sound_manager=self.sound_manager)
-
-
-def show_level_one(
-        player_name: str,
-        sound_manager: SoundManager | None = None
-):
-    level = LevelOneStory(sound_manager=sound_manager)
-    level.show(player_name)
+    if choice == 0:
+        endings.show_game_over(
+            (
+                "Ты утонул.",
+                "Кажется, плавать в доспехах - не самая удачная идея.",
+            ),
+            sound_manager
+        )
+    else:
+        # endings.show_victory(player_name, sound_manager)
+        show_placeholder()
