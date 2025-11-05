@@ -16,7 +16,7 @@ def show_game_over(reason, sound_manager: SoundManager | None = None):
         reason_lines = [str(reason)]
 
     lines = [
-        "[bright_red]Ты проиграл... :([/bright_red]",
+        "[bright_red]Ты проиграл! :([/bright_red]",
         "",
         *reason_lines,
         "",
