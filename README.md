@@ -3,20 +3,23 @@
 ![Alt text](https://files.catbox.moe/anh1tn.png "Demo")
 
 Текстовая игра, написанная на `Python 🐍` с использованием принципов ООП.  
-**Победите очень злого дракона!!!111 😡😡😡**
 
 **\*В __очень__ активной разработке**
 
 ## Структура проекта 🗃️
 ```
 Knight-Dragon/
-├── src/
+├── src
+│   ├── levels/
+│   │   └── ...
 │   ├── sounds/
 │   │   └── ...
-│   ├── __init__.py
+│   ├── endings.py
+│   ├── game.py
 │   ├── logo.ascii
 │   ├── sound_manager.py
-│   └── main_menu.py
+│   ├── ui.py
+│   └── utils.py
 ├── main.py
 ├── README.md
 └── requirements.txt
@@ -27,6 +30,7 @@ Knight-Dragon/
 - [x] Добавить звуки
 - [x] Добавить первый уровень #TODO: переписать диалоги
 - [x] Добавить две концовки
+- [ ] Добавить боевую систему
 - [ ] ...
 - [ ] ...
 - [ ] ???
